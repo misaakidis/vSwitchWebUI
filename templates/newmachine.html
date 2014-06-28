@@ -90,7 +90,7 @@
 				<div class="nav-collapse sidebar-nav">
 					<ul class="nav nav-tabs nav-stacked main-menu">
 						<li class="active"><a href="index.html"><i class="fa-icon-desktop"></i><span class="hidden-tablet"> Machines</span></a></li>	
-						<li class=""><a href="bridges.html"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Bridges</span></a></li>	
+						<li class=""><a href="bridges.html"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Bridges</span></a></li>		
 						<!--<li>
 							<a class="dropmenu" href="#"><i class="fa-icon-folder-close-alt"></i><span class="hidden-tablet"> Machines</span></a>
 							<ul>
@@ -115,134 +115,69 @@
 			<!-- start: Content -->
 			<div id="content" class="span11">
 			
-			
 			<div class="row-fluid">
-				<div class="span12 box">
-					<div class="box-header" data-original-title="">
-						<h2><i class="halflings-icon user"></i><span class="break"></span>Machines</h2>
-						<div class="box-icon">
-							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
-						</div>
-					</div>
-					<div class="box-content">
-						<div class="row-fluid">
-							<div class="span12 text-right">
-								<a class="btn btn-info" href="newmachine.html"><i class="fa-icon-plus"></i> Create</a> &nbsp;&nbsp;&nbsp;
-								<a class="btn btn-danger disabled" id="delete" href="#messageModal" role="button" data-toggle="modal">
-								<i class="fa-icon-trash"></i> Delete</a>
+				<div class="span12">
+					<h2><strong>New Machine: </strong></h2>
+					
+					<div class="box">
+						<div class="box-header" data-original-title="">
+							<h2><i class="halflings-icon cog"></i><span class="break"></span>Configuration</h2>
+							<div class="box-icon">
+								<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up icon-chevron-up"></i></a>
 							</div>
 						</div>
-						<table class="table table-striped table-bordered bootstrap-datatable datatable" id="machines-table">
-						  <thead>
-							  <tr>
-								  <th><input type="checkbox" value="" id="toggle-all"/> <label class="inline-label" for="toggle-all">Toggle All</label></th>
-								  <th>Machine Name</th>
-								  <th>Actions</th>
-							  </tr>
-						  </thead>   
-						  <tbody>
-							<tr>
-								<td><input type="checkbox" value="" class="togglable" item-id="1"/></td>
-								<td>Machine 1</td>
-								<td class="center">
-									<a class="btn btn-success" href="#">
-										<i class="halflings-icon zoom-in halflings-icon"></i>  
-									</a>
-									<a class="btn btn-info" href="editmachine.html">
-										<i class="halflings-icon edit halflings-icon"></i>  
-									</a>
-									<a class="btn btn-danger del-item" href="#" item-id="1">
-										<i class="halflings-icon trash halflings-icon"></i> 
-									</a>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" value="" class="togglable" item-id="2"/></td>
-								<td>Machine 2</td>
-								<td class="center">
-									<a class="btn btn-success" href="#">
-										<i class="halflings-icon zoom-in halflings-icon"></i>  
-									</a>
-									<a class="btn btn-info" href="editmachine.html">
-										<i class="halflings-icon edit halflings-icon"></i>  
-									</a>
-									<a class="btn btn-danger del-item" href="#" item-id="2">
-										<i class="halflings-icon trash halflings-icon"></i> 
-									</a>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" value="" class="togglable" item-id="3"/></td>
-								<td>Machine 3</td>
-								<td class="center">
-									<a class="btn btn-success" href="#">
-										<i class="halflings-icon zoom-in halflings-icon"></i>  
-									</a>
-									<a class="btn btn-info" href="editmachine.html">
-										<i class="halflings-icon edit halflings-icon"></i>  
-									</a>
-									<a class="btn btn-danger del-item" href="#" item-id="3">
-										<i class="halflings-icon trash halflings-icon"></i> 
-									</a>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" value="" class="togglable" item-id="4"/></td>
-								<td>Machine 4</td>
-								<td class="center">
-									<a class="btn btn-success" href="#">
-										<i class="halflings-icon zoom-in halflings-icon"></i>  
-									</a>
-									<a class="btn btn-info" href="editmachine.html">
-										<i class="halflings-icon edit halflings-icon"></i>  
-									</a>
-									<a class="btn btn-danger del-item" href="#" item-id="4">
-										<i class="halflings-icon trash halflings-icon"></i> 
-									</a>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" value="" class="togglable" item-id="5"/></td>
-								<td>Machine 5</td>
-								<td class="center">
-									<a class="btn btn-success" href="#">
-										<i class="halflings-icon zoom-in halflings-icon"></i>  
-									</a>
-									<a class="btn btn-info" href="editmachine.html">
-										<i class="halflings-icon edit halflings-icon"></i>  
-									</a>
-									<a class="btn btn-danger del-item" href="#" item-id="5">
-										<i class="halflings-icon trash halflings-icon"></i> 
-									</a>
-								</td>
-							</tr>
-							
-						  </tbody>
-						</table>
+						<div class="box-content" style="display: block;">
+							<form method="get" id="new-bridge-form" class="form-horizontal">
+								<fieldset>
+									<div class="control-group">
+										<label class="control-label" for="option1">Host Name: </label>
+										<div class="controls">
+										  <input class="input-xlarge focused" id="host-name" type="text" value="">
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label" for="option2">Port Name: </label>
+										<div class="controls">
+										  <input class="input-xlarge focused" id="port-name" type="text" value="">
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label" for="option3">VLAN ID: </label>
+										<div class="controls">
+											<input class="input-xlarge focused" id="vlan-id" type="text" value="">
+										</div>
+									</div>
+									<div class="form-actions text-right">
+										<button type="submit" class="btn btn-primary" id="save" ><i class="fa-icon-save"></i> Create</button>
+										<a class="btn" href="index.html"><i class="fa-icon-remove"></i> Cancel</a>
+									</div>
+								</fieldset>
+							</form>
+						</div>
 					</div>
 				</div>
-			</div>		
+			</div>
 			
-       
 					
 			</div>
 			<!-- end: Content -->
+			
 <!-- end: Widgets Area -->
 
-<a id="widgets-area-button" class="hidden-tablet hidden-phone open"><i class="fa-icon-reorder"></i></a>
+<a id="widgets-area-button" class="hidden-tablet hidden-phone open"><i class="fa-icon-reorder"></i></a>				
 				</div><!--/fluid-row-->
 				
-		<div class="modal hide fade" id="messageModal">
+		<div class="modal hide fade" id="myModal">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">×</button>
-				<h3 class="title">Delete Confirmation</h3>
+				<h3>Settings</h3>
 			</div>
 			<div class="modal-body">
-				<p>Are you sure you want to delete the selected machine(s)?</p>
+				<p>Here settings can be configured...</p>
 			</div>
 			<div class="modal-footer">
-				<a href="#" class="btn del-no" data-dismiss="modal" ><i class="fa-icon-remove"></i> No</a>
-				<a href="#" id="del-machine-ok" class="btn btn-primary del-ok" data-dismiss="modal"><i class="fa-icon-check"></i> Yes</a>
+				<a href="#" class="btn" data-dismiss="modal">Close</a>
+				<a href="#" class="btn btn-primary">Save changes</a>
 			</div>
 		</div>
 		

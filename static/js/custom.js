@@ -1,5 +1,5 @@
 $(document).ready(function(){
-			
+	delItems = [];
 	/* ---------- Acivate Functions ---------- */
 	template_functions();
 	init_masonry();
@@ -20,11 +20,10 @@ $(document).ready(function(){
 	}
 	
 	chart();
-	messageLike();
 	
 	setInterval(tempStats, 3000);
 		
-	$("#config-form").submit(function(e){
+	$("#machine-form").submit(function(e){
 		e.preventDefault();
 		var data = {
 		
@@ -33,43 +32,123 @@ $(document).ready(function(){
 			'/api/v1.0/uname',
 			data,
 			function(response){
-				alert('Reponse: '+response);
+				alert('Reponse: '+response.username);
 			},
-			'html'
+			'json'
 		);
+	});
+	
+	// briges toggle all
+	$('#toggle-all').click(function(e){
+		var togglables = $('.togglable');
+		
+		if($(this).is(':checked')){
+			togglables.prop('checked', true);
+			togglables.parent().addClass('checked');
+		}else{
+			togglables.prop('checked', false);
+			togglables.parent().removeClass('checked');
+		}
+		
+		togglables.each(function(index, elem){
+			updateDelList($(elem));
+		});
+		
+	});
+	// individual brige selector
+	$('.togglable').change(function(){
+		updateDelList($(this));
+	});
+	
+	// message dialog
+	$('#messageModal').on('show', function (e) {
+		if(delItems.length == 0){
+			e.preventDefault();
+		}
+	});
+	
+	// delete bridges handler
+	$('#del-bridge-ok').click(function(){
+		var data = {
+			delItems : delItems
+		};
+		$.ajax({
+			url     : "/api/v1.0/bridge",
+			type    : "DELETE",
+			data    : data,
+			success : function(response){
+				alert("del request received for: "+response.items);
+			},
+			dataType : 'json'
+		});
+	});
+	
+	$('#del-machine-ok').click(function(){
+		var data = {
+			delItems : delItems
+		};
+		$.ajax({
+			url     : "/api/v1.0/machine",
+			type    : "DELETE",
+			data    : data,
+			success : function(response){
+				
+			},
+			dataType : 'json'
+		});
+	});
+	
+	$('.del-item').click(function(){
+		var itemID = $(this).attr('item-id');
+		// reset delete list - avoid unintended deletion
+		delItems = [];
+		delItems.push(itemID);
+		
+		// unselect toggle all and selected items
+		$('#toggle-all').prop('checked', false);
+		$('#toggle-all').parent().removeClass('checked');
+		
+		$('.togglable').prop('checked', false);
+		$('.togglable').parent().removeClass('checked');
+		
+		$('#messageModal').modal('show');
 	});
 });
 
-/* ---------- Like/Dislike ---------- */
+/* ---------- toogleAll Helhper ---------- */
 
-function messageLike(){
-	
-	if($('.messagesList')) {
+function updateDelList(clickedItem){
+	var bridgeID = clickedItem.attr('item-id');
 		
-		$('.messagesList').on('click', '.star', function(){
-			
-			$(this).removeClass('star');
-			
-			$(this).addClass('dislikes');
-			
-			//here add your function
-			
-		});
+		if(clickedItem.is(':checked')){
+			delItems.push(bridgeID);
+			$('#delete').removeClass('disabled');
+			return;
+		}
+		var itemIndex = $.inArray(bridgeID, delItems);
 		
-		$('.messagesList').on('click', '.dislikes', function(){
-			
-			$(this).removeClass('dislikes');
-			
-			$(this).addClass('star');
-			
-			//here add your function
-			
-		});	
+		if( -1 != itemIndex){
+			delItems.splice(itemIndex);
+		}
 		
-	}	
-	
+		if(delItems.length == 0){
+			$('#delete').addClass('disabled');
+		}
 }
-
+function sendDelReq(url){
+	var data = {
+			delItems : delItems
+		};
+		$.ajax({
+			url     : url,
+			type    : "DELETE",
+			data    : data,
+			success : function(response){
+				alert("del request received for: "+response.items);
+			},
+			dataType : 'json'
+		});
+}
 /* ---------- Temp Stats ---------- */
 
 function tempStats(){
@@ -278,9 +357,27 @@ function template_functions(){
 	});
 
 	/* ---------- Datable ---------- */
-	$('.datatable').dataTable({
+	$('#machines-table').dataTable({
 			"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'i><'span12 center'p>>",
 			"sPaginationType": "bootstrap",
+			"aoColumns": [
+				{ "sWidth": "10%" },
+				{ "sWidth": "60%" },
+				null
+			],
+			"oLanguage": {
+			"sLengthMenu": "_MENU_ records per page"
+			}
+		} );
+	$('#bridges-table').dataTable({
+			"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'i><'span12 center'p>>",
+			"sPaginationType": "bootstrap",
+			"aoColumns": [
+				{ "sWidth": "10%" },
+				{ "sWidth": "50%" },
+				null,
+				null
+			],
 			"oLanguage": {
 			"sLengthMenu": "_MENU_ records per page"
 			}
