@@ -1,3 +1,4 @@
+import json
 from flask import Flask, jsonify, abort, make_response, render_template, send_from_directory
 from flask.ext.httpauth import HTTPDigestAuth
 from fabfile import FabricSupport
@@ -58,11 +59,16 @@ def index():
 def machines():
     return render_template('machines.html', error=None)
 
+@app.route('/bridges.html')
+@auth.login_required
+def bridges():
+    return render_template('bridges.html', error=None)
+
 @app.route('/logout/')
 @auth.login_required
 def logout():
     resp = make_response(render_template('logout.html'))
-    resp.delete_cookie("session")
+    resp.set_cookie('session', expires=0)
     return resp
 
 
@@ -76,6 +82,13 @@ def getApiRoot():
 @auth.login_required
 def getUname():
 	return jsonify(uname=fab.execute("host_type", hosts))
+
+@app.route('/api/v1.0/bridge/', methods=['GET'])
+@auth.login_required
+def getBridges():
+    bridges_dict = fab.execute("ovs_list_bridges", hosts).replace("\r","").split("\n")  
+    return json.dumps(bridges_dict)
+    #return fab.execute("ovs_list_bridges", hosts)
 
 
 # Rules for static files serving

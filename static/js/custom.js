@@ -23,13 +23,13 @@ $(document).ready(function(){
 	
 	setInterval(tempStats, 3000);
 		
-	$("#machine-form").submit(function(e){
+	$("#machines-form").submit(function(e){
 		e.preventDefault();
 		var data = {
 		
 		};
 		$.get(
-			'/api/v1.0/machine',
+			'/api/v1.0/bridge',
 			data,
 			function(response){
 				alert('Reponse: '+response);
