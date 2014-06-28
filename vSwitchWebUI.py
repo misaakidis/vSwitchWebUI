@@ -1,10 +1,12 @@
-from flask import Flask, jsonify, abort, render_template, send_from_directory
+from flask import Flask, jsonify, abort, make_response, render_template, send_from_directory
 from flask.ext.httpauth import HTTPDigestAuth
-from test import uname
+from fabfile import FabricSupport
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'bad key'
 auth = HTTPDigestAuth()
+hosts = ['root@192.168.88.251']
+fab = FabricSupport()
 
 
 # Logging to file vSwitch.log
@@ -56,10 +58,13 @@ def index():
 def machines():
     return render_template('machines.html', error=None)
 
-@app.route('/logout')
+@app.route('/logout/')
 @auth.login_required
 def logout():
-    abort(401)
+    resp = make_response(render_template('logout.html'))
+    resp.delete_cookie("session")
+    return resp
+
 
 # Adding routes for the API calls
 @app.route('/api/v1.0/', methods=['GET'])
@@ -70,7 +75,7 @@ def getApiRoot():
 @app.route('/api/v1.0/uname/', methods=['GET'])
 @auth.login_required
 def getUname():
-	return jsonify(uname=uname())
+	return jsonify(uname=fab.execute("host_type", hosts))
 
 
 # Rules for static files serving
