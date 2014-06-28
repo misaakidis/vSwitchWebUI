@@ -29,10 +29,55 @@ $(document).ready(function(){
 		
 		};
 		$.get(
-			'/api/v1.0/uname',
+			'/api/v1.0/machine',
 			data,
 			function(response){
-				alert('Reponse: '+response.username);
+				alert('Reponse: '+response);
+			},
+			'json'
+		);
+	});
+	
+	$("#new-machine-form").submit(function(e){
+		e.preventDefault();
+		var data = {
+		
+		};
+		$.get(
+			'/api/v1.0/bridge',
+			data,
+			function(response){
+				alert('Reponse: '+response);
+			},
+			'json'
+		);
+	});
+	
+	$("#bridge-form").submit(function(e){
+		e.preventDefault();
+		var data = {
+		
+		};
+		$.get(
+			'/api/v1.0/bridge',
+			data,
+			function(response){
+				alert('Reponse: '+response);
+			},
+			'json'
+		);
+	});
+	
+	$("#new-bridge-form").submit(function(e){
+		e.preventDefault();
+		var data = {
+		
+		};
+		$.get(
+			'/api/v1.0/bridge',
+			data,
+			function(response){
+				alert('Reponse: '+response);
 			},
 			'json'
 		);
