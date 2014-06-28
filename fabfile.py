@@ -12,9 +12,8 @@ def host_arp():
 def ovs_show_cfg():
 	run('ovs-vsctl show')	
 
-def ovs_add_bridge():
-	run("ovs-vsctl add-br {name}!").format(name=name)
+def ovs_add_bridge(name):
+	run("ovs-vsctl add-br %s" % name)
 
-def ovs_del_bridge():
-    name('myusername')
-    run('ovs-vsctl del-controller' % name)    
+def ovs_del_bridge(name):
+    run("ovs-vsctl del-br %s" % name) 
