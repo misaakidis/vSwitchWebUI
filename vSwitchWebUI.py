@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, abort, render_template, send_from_directory
 from flask.ext.httpauth import HTTPDigestAuth
 from test import uname
 
@@ -35,12 +35,17 @@ def get_pw(username):
 @app.route('/')
 @auth.login_required
 def index():
-    return "Hello, %s!" % auth.username()
+    return render_template('index.html', error=None)
+
+@app.route('/machines')
+@auth.login_required
+def machines():
+    return render_template('machines.html', error=None)
 
 @app.route('/logout/')
 @auth.login_required
 def logout():
-    return "Hello, %s!" % auth.username()
+    abort(401)
 
 @app.route('/api/v1.0/')
 @auth.login_required
@@ -51,6 +56,23 @@ def getApiRoot():
 @auth.login_required
 def getUname():
 	return jsonify(uname=uname())
+
+
+@app.route('/js/<path:filename>')
+def send_js(filename):
+    return send_from_directory('static/js/', filename)
+
+@app.route('/css/<path:filename>')
+def send_css(filename):
+    return send_from_directory('static/css/', filename)
+
+@app.route('/img/<path:filename>')
+def send_img(filename):
+    return send_from_directory('static/img/', filename)
+
+@app.route('/font/<path:filename>')
+def send_font(filename):
+    return send_from_directory('static/font/', filename)
 
 
 if __name__ == '__main__':
