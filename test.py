@@ -5,7 +5,6 @@ HOST="root@192.168.88.251"
 # Ports are handled in ~/.ssh/config since we use OpenSSH
 COMMAND="uname -a"
 
-uname -a
 ssh = subprocess.Popen(["ssh", "%s" % HOST, COMMAND],
                        shell=False,
                        stdout=subprocess.PIPE,
