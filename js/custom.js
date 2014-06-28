@@ -30,7 +30,7 @@ $(document).ready(function(){
 		
 		};
 		$.get(
-			'/api/v1.0/test'
+			'/api/v1.0/test',
 			data,
 			function(response){
 				alert('Reponse: '+response);
