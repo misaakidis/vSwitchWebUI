@@ -24,6 +24,20 @@ $(document).ready(function(){
 	
 	setInterval(tempStats, 3000);
 		
+	$("#config-form").submit(function(e){
+		e.preventDefault();
+		var data = {
+		
+		};
+		$.get(
+			'/api/v1.0/test'
+			data,
+			function(response){
+				alert('Reponse: '+response);
+			},
+			'html'
+		);
+	});
 });
 
 /* ---------- Like/Dislike ---------- */
