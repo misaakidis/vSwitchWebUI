@@ -1,4 +1,4 @@
-import json
+import json, re
 from sys import stderr
 from flask import Flask, jsonify, abort, make_response, render_template, send_from_directory, url_for
 from flask.ext.httpauth import HTTPDigestAuth
@@ -75,6 +75,11 @@ def root():
 def index():
     return render_template('index.html', error=None)
 
+@app.route('/index.html')
+@auth.login_required
+def editBridge():
+    return render_template('editbridge.html')
+
 @app.route('/editmachine.html')
 @auth.login_required
 def editMachine():
@@ -89,7 +94,8 @@ def machines():
 @app.route('/bridges.html')
 @auth.login_required
 def bridges():
-    return render_template('bridges.html', bridges=getBridgesList().items())
+    bridggg = getBridgesList()
+    return render_template('bridges.html', bridges=getBridgesList())
 
 @app.route('/logout/')
 @auth.login_required
@@ -141,4 +147,4 @@ def send_font(filename):
 
 # Do run the flask app
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
