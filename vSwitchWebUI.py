@@ -1,4 +1,4 @@
-from json import dumps
+import json
 from sys import stderr
 from flask import Flask, jsonify, abort, make_response, render_template, send_from_directory, url_for
 from flask.ext.httpauth import HTTPDigestAuth
@@ -7,7 +7,7 @@ from fabfile import FabricSupport
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'bad key'
 auth = HTTPDigestAuth()
-hosts = ['root@127.0.0.1']
+hosts = ['root@192.168.88.251']
 fab = FabricSupport()
 
 
@@ -33,7 +33,6 @@ def auth_error():
 #    return render_template('404.html'), 404
 
 
-
 # Custom authentication
 users = {
     "admin": "admin",
@@ -47,6 +46,9 @@ def get_pw(username):
 
 app.jinja_env.globals.update(getUsername=auth.username)
 
+def getBridgesList():
+    return fab.execute("ovs_list_bridges", hosts).values()[0].split("\r\n")
+
 
 # Adding routes for the Web UI
 @app.route('/')
@@ -59,6 +61,12 @@ def root():
 def index():
     return render_template('index.html', error=None)
 
+@app.route('/editmachine.html')
+@auth.login_required
+def editMachine():
+    list = getBridgesList()[0].split("\r\n")
+    return render_template('editmachine.html', bridges=getBridgesList())
+
 @app.route('/machines.html')
 @auth.login_required
 def machines():
@@ -67,7 +75,7 @@ def machines():
 @app.route('/bridges.html')
 @auth.login_required
 def bridges():
-    return render_template('bridges.html', error=None)
+    return render_template('bridges.html', bridges=getBridgesList().items())
 
 @app.route('/logout/')
 @auth.login_required
@@ -91,9 +99,16 @@ def getUname():
 @app.route('/api/v1.0/bridge/', methods=['GET'])
 @auth.login_required
 def getBridges():
-    bridges_dict = fab.execute("ovs_list_bridges", hosts).values()
-    bridges_strlist = bridges_dict[0].replace("\r","").split("\n")
-    return json.dumps(bridges_strlist)
+    return json.dumps(getBridgesList())
+
+@app.route('/api/v1.0/bridge/<bridgeName>/ports', methods=['GET'])
+@auth.login_required
+def getBridgePorts(bridgeName):
+    ovs_conf = fab.execute("ovs_show_cfg", hosts).values()
+    bridge_list = ovs_conf[0].replace("\r\n","").split("Bridge");
+    if any(bridgeName in bridge for bridge in bridge_list):
+        bridge_conf = bridge
+    return json.dumps(bridge_list)
 
 
 # Rules for static files serving

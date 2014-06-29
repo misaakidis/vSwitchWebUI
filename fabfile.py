@@ -21,6 +21,7 @@ class FabricSupport:
 
 		def ovs_list_bridges(self):
 			return run("ovs-vsctl show | grep 'Bridge' | sed -e 's/^[ tab]\+Bridge //g'")
+		
 		def ovs_add_bridge(self, name):
 			return run("ovs-vsctl add-br %s" % name)
 
