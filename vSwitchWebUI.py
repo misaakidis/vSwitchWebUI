@@ -46,8 +46,22 @@ def get_pw(username):
 
 app.jinja_env.globals.update(getUsername=auth.username)
 
+
+# Functions for manipulating fab output
 def getBridgesList():
     return fab.execute("ovs_list_bridges", hosts).values()[0].split("\r\n")
+
+def getBridgeConf(bridgeName):
+    ovs_conf = fab.execute("ovs_show_cfg", hosts).values()
+    bridge_list = ovs_conf[0].replace("\r\n","").split("Bridge");
+    bridge_conf = [bridge for bridge in bridge_list if bridgeName in bridge]
+    return bridge_conf
+
+def getBridgePortsList(bridgeName):
+    bridge_conf = getBridgeConf(bridgeName)
+    bridgePortsList = bridge_conf[0].replace("\r\n","").split("Port")
+    bridgePortsList.pop(0)
+    return bridgePortsList
 
 
 # Adding routes for the Web UI
@@ -104,11 +118,7 @@ def getBridges():
 @app.route('/api/v1.0/bridge/<bridgeName>/ports', methods=['GET'])
 @auth.login_required
 def getBridgePorts(bridgeName):
-    ovs_conf = fab.execute("ovs_show_cfg", hosts).values()
-    bridge_list = ovs_conf[0].replace("\r\n","").split("Bridge");
-    if any(bridgeName in bridge for bridge in bridge_list):
-        bridge_conf = bridge
-    return json.dumps(bridge_list)
+    return json.dumps(getBridgePortsList(bridgeName))
 
 
 # Rules for static files serving
