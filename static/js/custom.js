@@ -158,6 +158,74 @@ $(document).ready(function(){
 		
 		$('#messageModal').modal('show');
 	});
+	
+	/* Bridges CRUD */
+	
+	/* bridge add */
+	$('#add-bridge').click(function(){
+		var $bridgeModal = $("#bridgeCrudModal");
+		var $formControlBtn = $bridgeModal.find('.form-control');
+		
+		if($formControlBtn.attr("id") != "bridge-add-action"){
+			$("#bridge-crud-form input").val("");
+			$formControlBtn.attr('id', 'bridge-add-action');
+		}
+		
+		$bridgeModal.modal("show");
+	});
+
+	/* bridge edit */
+	$('.bridge-edit').click(function(){
+		var $bridgeModal = $("#bridgeCrudModal");
+		var $formControlBtn = $bridgeModal.find('.form-control');
+		
+		var $targetParent = $(this).parent();
+		var itemID        = $targetParent.attr('item-id');
+		
+		if($formControlBtn.attr("id") != "bridge-edit-action"){
+			$("#bridge-crud-form input").val("");
+			$formControlBtn.attr('id', 'bridge-edit-action');
+		}
+		/* populate values */
+		var portName = $targetParent.find('input.port-name');
+		var hostName = $targetParent.find('input.host-name');
+		var vlanID   = $targetParent.find('input.vlan-id');
+		
+		$("#bridge-crud-form").find("input#port-name").val(portName);
+		$("#bridge-crud-form").find("input#host-name").val(hostName);
+		$("#bridge-crud-form").find("input#vlan-id").val(vlanID);
+		$("#bridge-crud-form").find("input#item-id").val(itemID);
+		
+		/* display update modal */
+		$bridgeModal.modal("show");
+		
+	});
+	
+	$("#bridge-add-action").click(function(e){
+		var data = getBridgeFormData($("#bridge-crud-form"));
+		
+		$.post(
+			'/api/v1.0/addbridge',
+			data,
+			function(response){
+			
+			},
+			'json'
+		);
+	});
+	
+	$("#bridge-edit-action").click(function(e){
+		var data = getBridgeFormData($("#bridge-crud-form"));
+		
+		$.post(
+			'/api/v1.0/editbridge',
+			data,
+			function(response){
+			
+			},
+			'json'
+		);
+	});
 });
 
 /* ---------- toogleAll Helhper ---------- */
@@ -194,6 +262,25 @@ function sendDelReq(url){
 			dataType : 'json'
 		});
 }
+
+/* ---------- Bridge CRUD Helpers ---------- */
+function getBridgeFormData(form){
+	
+	var portName = form.find('input#port-name').val();
+	var hostName = form.find('input#host-name').val();
+	var vlanID   = form.find('input#vlan-id').val();
+	var itemID   = form.find('input#item-id').val();
+	
+	var data = {
+		portName : portName,
+		hostName : hostName,
+		vlanID   : vlanID,
+		itemID   : itemID
+	};
+	
+	return data;
+}
+
 /* ---------- Temp Stats ---------- */
 
 function tempStats(){

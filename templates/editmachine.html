@@ -71,7 +71,7 @@
 				<h3 class="title">Bridge Form</h3>
 			</div>
 			<div class="modal-body">
-				<form id="bridge-crud-form">
+				<form id="bridge-crud-form" method="post">
 					<fieldset>
 						<div class="control-group">
 							<label class="control-label" for="option1">Host Name: </label>
@@ -91,12 +91,13 @@
 								<input class="input-xlarge focused" id="vlan-id" type="text" value="">
 							</div>
 						</div>
+						<input type="hidden" id="item-id" value="">
 					</fieldset>
 				</form>
 			</div>
 			<div class="modal-footer">
 				<a href="#" id="" class="btn btn-primary" data-dismiss="modal"><i class="fa-icon-remove"></i> Close</a>
-				<a href="#" class="btn " data-dismiss="modal" ><i class="fa-icon-save"></i> Save</a>
+				<a href="#" class="btn form-control" id="add" data-dismiss="modal" ><i class="fa-icon-save"></i> Save</a>
 			</div>
 		</div>
 {% endblock %}
