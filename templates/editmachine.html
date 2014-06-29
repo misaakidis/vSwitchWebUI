@@ -20,7 +20,7 @@
 									<div class="control-group">
 										<label class="control-label" for="option1">Host Name: </label>
 										<div class="controls">
-										  <input class="input-xlarge focused" id="host-name" type="text" value="{{machine.hostname}}">
+										  <input class="input-xlarge focused" id="host-name" type="text" value="192.168.88.51">
 										</div>
 									</div>
 									<div class="box span12">
@@ -38,9 +38,8 @@
 											</div>
 											<div class="todo">
 												<ul class="todo-list bridge-list">
-													{% for bridge in machineBridges %}
-														<li>{{bridge}} 
-															<span class="todo-actions" item-id="{{bridge|replace(' ', '-')}}">
+														<li>kakos 
+															<span class="todo-actions" item-id="kakos">
 																<a href="#" class="bridge-edit" title="Edit"><i class="fa-icon-edit"></i></a>
 																<a href="#" class="bridge-dupliacte" title="Duplicate"><i class="fa-icon-copy"></i></a>
 																<a href="#" class="bridge-delete" title="Delete"><i class="fa-icon-remove"></i></a>
@@ -51,7 +50,6 @@
 																<input type="hidden" class="vlan-id"  value="" />
 															</span>
 														</li>
-													{% endfor %}
 												</ul>
 											</div>
 										</div>
