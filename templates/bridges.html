@@ -31,10 +31,10 @@
 						  <tbody>
 							{% for bridge in bridges %}
 							<tr>
-								<td><input type="checkbox" value="" class="togglable" item-id="{{bridge.name|replace(' ', '-')}}"/></td>
-								<td>{{bridge.name}}</td>
+								<td><input type="checkbox" value="" class="togglable" item-id="{{bridge}}"/></td>
+								<td>{{bridge}}</td>
 								<td class="center">
-									<span class="label label-success">{{bridge.status}}</span>
+									<span class="label label-success">Active</span>
 								</td>
 								<td class="center">
 									<a class="btn btn-success" href="#">
@@ -43,7 +43,7 @@
 									<a class="btn btn-info" href="{{ url_for('editbridge') }}">
 										<i class="halflings-icon edit halflings-icon"></i>  
 									</a>
-									<a class="btn btn-danger del-item" href="#" item-id="{{bridge.name|replace(' ', '-')}}">
+									<a class="btn btn-danger del-item" href="#" item-id="{{bridge}}">
 										<i class="halflings-icon trash halflings-icon"></i> 
 									</a>
 								</td>
