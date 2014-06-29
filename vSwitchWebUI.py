@@ -1,4 +1,5 @@
-import json
+from json import dumps
+from sys import stderr
 from flask import Flask, jsonify, abort, make_response, render_template, send_from_directory
 from flask.ext.httpauth import HTTPDigestAuth
 from fabfile import FabricSupport
@@ -6,7 +7,7 @@ from fabfile import FabricSupport
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'bad key'
 auth = HTTPDigestAuth()
-hosts = ['root@192.168.88.251']
+hosts = ['root@127.0.0.1']
 fab = FabricSupport()
 
 
@@ -18,6 +19,8 @@ if not app.debug:
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.WARNING)
     app.logger.addHandler(file_handler)
+    # Uncomment next line to enable debugging output
+    #logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 
 # Custom flask handlers
@@ -86,9 +89,9 @@ def getUname():
 @app.route('/api/v1.0/bridge/', methods=['GET'])
 @auth.login_required
 def getBridges():
-    bridges_dict = fab.execute("ovs_list_bridges", hosts).replace("\r","").split("\n")  
-    return json.dumps(bridges_dict)
-    #return fab.execute("ovs_list_bridges", hosts)
+    bridges_dict = fab.execute("ovs_list_bridges", hosts).values()
+    bridges_strlist = bridges_dict[0].replace("\r","").split("\n")
+    return json.dumps(bridges_strlist)
 
 
 # Rules for static files serving
