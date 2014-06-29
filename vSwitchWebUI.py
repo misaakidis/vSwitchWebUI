@@ -1,6 +1,6 @@
 from json import dumps
 from sys import stderr
-from flask import Flask, jsonify, abort, make_response, render_template, send_from_directory
+from flask import Flask, jsonify, abort, make_response, render_template, send_from_directory, url_for
 from flask.ext.httpauth import HTTPDigestAuth
 from fabfile import FabricSupport
 
@@ -44,6 +44,8 @@ def get_pw(username):
     if username in users:
         return users.get(username)
     return None
+
+app.jinja_env.globals.update(getUsername=auth.username)
 
 
 # Adding routes for the Web UI
