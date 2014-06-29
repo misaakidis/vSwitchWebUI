@@ -1,5 +1,6 @@
 $(document).ready(function(){
-	delItems = [];
+	delItems  = [];
+	bridges   = [];
 	/* ---------- Acivate Functions ---------- */
 	template_functions();
 	init_masonry();
@@ -170,6 +171,7 @@ $(document).ready(function(){
 			$("#bridge-crud-form input").val("");
 			$formControlBtn.attr('id', 'bridge-add-action');
 		}
+		$("#ports-list").html('');
 		
 		$bridgeModal.modal("show");
 	});
@@ -196,6 +198,27 @@ $(document).ready(function(){
 		$("#bridge-crud-form").find("input#vlan-id").val(vlanID);
 		$("#bridge-crud-form").find("input#item-id").val(itemID);
 		
+		
+		/* retrive all the ports of this bridge */
+		var ports = null;
+		for(var i = 0, count = bridges.length; i < count; i++){
+			var bridgeName   = bridges[i].name;
+			
+			if(itemID == bridgeName){
+				ports = bridges[i].ports;
+			}
+		}
+		var portListMarkup = '';
+		if(ports != null){
+			
+			for(var i 0, count = ports.length; i < count, i++) {
+				portListMarkup += '<div class="row-fluid">';
+				portListMarkup += '<div class="span6">Port Name: <input type="text" class="pname" value="'+ports[i].name+'"/></div>';
+				portListMarkup += '<div class="span6">Interface: <input type="text" class="iname" value="'+ports[i].pinterface+'"/></div>';
+				portListMarkup += '</div>';
+			}
+		}
+		$("#ports-list").html(portListMarkup);
 		/* display update modal */
 		$bridgeModal.modal("show");
 		
@@ -220,11 +243,18 @@ $(document).ready(function(){
 		$.post(
 			'/api/v1.0/editbridge',
 			data,
-			function(response){
-			
-			},
+			onBrigePortRequestComplete(data.itemID),
 			'json'
 		);
+	});
+	
+	$('.add-port').click(function(){
+		var template = '<div class="row-fluid">';
+		template    += '<div class="span6">Port Name: <input type="text" class="pname" value=""/></div>';
+		template    += '<div class="span6">Interface: <input type="text" class="iname"/></div>';
+		template    += '</div>';
+		
+		$("#ports-list").append(template);
 	});
 });
 
@@ -271,8 +301,19 @@ function getBridgeFormData(form){
 	var vlanID   = form.find('input#vlan-id').val();
 	var itemID   = form.find('input#item-id').val();
 	
+	var ports = null;
+	
+	for(var i = 0, count = bridges.length; i < count; i++){
+		var bridgeName   = bridges[i].name;
+		
+		if(itemID == bridgeName){
+			ports = bridges[i].ports;
+		}
+	}
+	
 	var data = {
 		portName : portName,
+		ports    : ports,
 		hostName : hostName,
 		vlanID   : vlanID,
 		itemID   : itemID
@@ -281,6 +322,59 @@ function getBridgeFormData(form){
 	return data;
 }
 
+function getBridgesPorts(){
+	
+	$(".bridge-list li").each(function(index, elem){
+		var $elem    = $(elem);
+		var bridgeID = $(elem).find('span.todo-actions').attr('item-id');
+		
+		var bridge = {
+			id    : bridgeID
+			ports : null,
+		};
+		bridges.push(bridge);
+		window.setTimeout(getBridgePorts, 3000, bridge)
+	});
+}
+
+function getBridgePort(bridge){
+	var bridgeName = bridge.id;
+	$.get(
+		'/api/v1.0/bridge/'+bridgeName+'/ports',
+		null,
+		onBrigePortRequestComplete(bridgeName),
+		'json'
+	);
+}
+
+function onBrigePortRequestComplete(requestedBridgeName){
+	
+	return function(response){
+			var bridgesCount = bridges.length;
+			for(var i = 0, i < bridgesCount; i++){
+				var bridgeName = bridges[i].name;
+				
+				if(requestedBridgeName == bridgeName){
+					bridges[i].ports = response.ports;
+					break;
+				}
+			}
+	};
+}
+function onBrigePortRequestComplete(bridgeName){
+	
+	return function(response){
+			var bridgesCount = bridges.length;
+			for(var i = 0, i < bridgesCount; i++){
+				var currentName = bridges[i].name;
+				
+				if(bridgeName == currentName){
+					bridges[i].ports = response.ports;
+					break;
+				}
+			}
+	};
+}
 /* ---------- Temp Stats ---------- */
 
 function tempStats(){

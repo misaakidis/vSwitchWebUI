@@ -37,17 +37,18 @@
 												</div>
 											</div>
 											<div class="todo">
-												<ul class="todo-list">
+												<ul class="todo-list bridge-list">
 													{% for bridge in machineBridges %}
-														<li>{{bridge.name}} 
-															<span class="todo-actions" item-id="{{bridge.name|replace(' ', '-')}}">
+														<li>{{bridge}} 
+															<span class="todo-actions" item-id="{{bridge|replace(' ', '-')}}">
 																<a href="#" class="bridge-edit" title="Edit"><i class="fa-icon-edit"></i></a>
 																<a href="#" class="bridge-dupliacte" title="Duplicate"><i class="fa-icon-copy"></i></a>
 																<a href="#" class="bridge-delete" title="Delete"><i class="fa-icon-remove"></i></a>
 																
-																<input type="hidden" class="port-name"/>
-																<input type="hidden" class="host-name"/>
-																<input type="hidden" class="vlan-id" />
+																<input type="hidden" class="port-name" value="" />
+																
+																<input type="hidden" class="host-name" value="" />
+																<input type="hidden" class="vlan-id"  value="" />
 															</span>
 														</li>
 													{% endfor %}
@@ -80,9 +81,13 @@
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="option2">Port Name: </label>
+							<label class="control-label" for="option2">Ports: </label>
 							<div class="controls">
-							  <input class="input-xlarge focused" id="port-name" type="text" value="">
+								<p class="text-right"><a href="#" class="add-port"> Add port</a></p>
+								
+								<div id="ports-list">
+									
+								</div>
 							</div>
 						</div>
 						<div class="control-group">
