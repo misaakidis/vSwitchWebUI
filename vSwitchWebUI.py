@@ -75,10 +75,15 @@ def root():
 def index():
     return render_template('index.html', error=None)
 
-@app.route('/index.html')
+@app.route('/editbridge.html')
 @auth.login_required
 def editBridge():
     return render_template('editbridge.html')
+
+@app.route('/newtbridge.html')
+@auth.login_required
+def newBridge():
+    return render_template('newbridge.html')
 
 @app.route('/editmachine.html')
 @auth.login_required

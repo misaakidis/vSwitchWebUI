@@ -210,8 +210,8 @@ $(document).ready(function(){
 		}
 		var portListMarkup = '';
 		if(ports != null){
-			
-			for(var i 0, count = ports.length; i < count, i++) {
+			var i = 0;
+			for(var count = ports.length; i < count; i++) {
 				portListMarkup += '<div class="row-fluid">';
 				portListMarkup += '<div class="span6">Port Name: <input type="text" class="pname" value="'+ports[i].name+'"/></div>';
 				portListMarkup += '<div class="span6">Interface: <input type="text" class="iname" value="'+ports[i].pinterface+'"/></div>';
@@ -329,8 +329,8 @@ function getBridgesPorts(){
 		var bridgeID = $(elem).find('span.todo-actions').attr('item-id');
 		
 		var bridge = {
-			id    : bridgeID
-			ports : null,
+			id    : bridgeID,
+			ports : null
 		};
 		bridges.push(bridge);
 		window.setTimeout(getBridgePorts, 3000, bridge)
@@ -351,7 +351,7 @@ function onBrigePortRequestComplete(requestedBridgeName){
 	
 	return function(response){
 			var bridgesCount = bridges.length;
-			for(var i = 0, i < bridgesCount; i++){
+			for(var i = 0; i < bridgesCount; i++){
 				var bridgeName = bridges[i].name;
 				
 				if(requestedBridgeName == bridgeName){
@@ -365,7 +365,7 @@ function onBrigePortRequestComplete(bridgeName){
 	
 	return function(response){
 			var bridgesCount = bridges.length;
-			for(var i = 0, i < bridgesCount; i++){
+			for(var i = 0; i < bridgesCount; i++){
 				var currentName = bridges[i].name;
 				
 				if(bridgeName == currentName){
